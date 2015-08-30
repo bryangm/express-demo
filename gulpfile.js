@@ -1,5 +1,8 @@
 var gulp = require('gulp');
 var nodemon = require('gulp-nodemon');
+var mocha = require('gulp-mocha');
+var env = require('gulp-env');
+var supertest = require('supertest');
 
 gulp.task('default', function() {
   nodemon({
@@ -8,9 +11,15 @@ gulp.task('default', function() {
     env: {
       PORT: 8000
     },
-    ibnore: ['./node_modules/**']
+    ignore: ['./node_modules/**']
   })
   .on('restart', function() {
     console.log('Restarting');
   });
+});
+
+gulp.task('test', function() {
+  env({vars: {ENV:'Test'}});
+  gulp.src('tests/*.js', {read: false})
+    .pipe(mocha({reporter: 'nyan'}));
 });
